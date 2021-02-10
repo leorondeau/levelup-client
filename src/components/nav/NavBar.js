@@ -5,8 +5,8 @@ import "./NavBar.css"
 export const NavBar = (props) => {
     return (
         <ul className="navbar">
-            <li className="navbar__item">
-                Navigation link
+            <li className="nav-item">
+                <Link className="nav-link" to="/events">Events</Link>
             </li>
             <li className="navbar__item">
                 Navigation link
