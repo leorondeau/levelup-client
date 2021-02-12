@@ -76,7 +76,7 @@ export const GameForm = props => {
                         onChange={handleControlledInputChange}
                     >
                         <option value="" disabled selected>Select your option</option> 
-                    {gameTypes.map(gt => <option value={gt.id}>{gt.label}</option>)} </select>
+                    {gameTypes.map(gt => <option key={gt.id} value={gt.id}>{gt.label}</option>)} </select>
 
                 </div>
             </fieldset>
