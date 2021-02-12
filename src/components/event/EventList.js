@@ -1,17 +1,21 @@
 import React, { useContext, useEffect } from "react"
 import { EventContext } from "./EventProvider.js"
+import { Link } from "react-router-dom"
 
 export const EventList = (props) => {
     const { events, getEvents } = useContext(EventContext)
 
     useEffect(() => {
         getEvents()
+        
     }, [])
 
     return (
         <article className="events">
             <header className="events__header">
                 <h1>Level Up Game Events</h1>
+                <button type="button" className="btn"><Link className="events__form-button" to="events/new">
+                    Create Event</Link></button>
             </header>
             {
                 events.map(event => {
