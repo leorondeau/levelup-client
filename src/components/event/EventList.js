@@ -14,8 +14,11 @@ export const EventList = (props) => {
         <article className="events">
             <header className="events__header">
                 <h1>Level Up Game Events</h1>
-                <button type="button" className="btn"><Link className="events__form-button" to="events/new">
-                    Create Event</Link></button>
+                <button className="btn btn-2 btn-sep icon-create"
+                onClick={() => {
+                    props.history.push({ pathname: "/events/new" })
+                }}
+            >Register New Event</button>
             </header>
             {
                 events.map(event => {
