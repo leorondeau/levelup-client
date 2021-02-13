@@ -9,9 +9,6 @@ export const NavBar = (props) => {
                 <Link className="nav-link" to="/events">Events</Link>
             </li>
             <li className="nav-item">
-                <Link className="nav-link" to="/create/game">Create Game</Link>
-            </li>
-            <li className="nav-item">
                 <Link className="nav-link" to="/">Games</Link>
             </li>
             {
