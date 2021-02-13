@@ -3,7 +3,7 @@ import { EventContext } from "./EventProvider.js"
 import { Link } from "react-router-dom"
 
 export const EventList = (props) => {
-    const { events, getEvents } = useContext(EventContext)
+    const { events, getEvents, joinEvent } = useContext(EventContext)
 
     useEffect(() => {
         getEvents()
@@ -14,8 +14,11 @@ export const EventList = (props) => {
         <article className="events">
             <header className="events__header">
                 <h1>Level Up Game Events</h1>
-                <button type="button" className="btn"><Link className="events__form-button" to="events/new">
-                    Create Event</Link></button>
+                <button className="btn btn-2 btn-sep icon-create"
+                onClick={() => {
+                    props.history.push({ pathname: "/events/new" })
+                }}
+            >Schedule New Event</button>
             </header>
             {
                 events.map(event => {
@@ -37,6 +40,9 @@ export const EventList = (props) => {
                                 })
                             }                          
                         </div>
+                        <button className="btn btn-2"
+                                onClick={() => joinEvent(event.id)}
+                        >Join</button>
                     </section>
                 })
             }
