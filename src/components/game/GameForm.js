@@ -3,13 +3,7 @@ import { GameContext } from "./GameProvider.js"
 
 
 export const GameForm = props => {
-    const { createGame, getGameTypes, gameTypes } = useContext(GameContext)
-
-    /*
-        Since the input fields are bound to the values of
-        the properties of this state variable, you need to
-        provide some default values.
-    */
+    const { createGame, getGameTypes, gameTypes, getGame, editGame } = useContext(GameContext)
     const [currentGame, setCurrentGame] = useState({
 
         numberOfPlayers: 0,
@@ -26,6 +20,23 @@ export const GameForm = props => {
         getGameTypes()
     }, [])
 
+    // console.log("" , gameId in props.match.params)
+    useEffect(() => {
+        
+        if ("gameId" in props.match.params) {
+            getGame(props.match.params.gameId).then(game => {
+                console.log(game)
+                setCurrentGame({
+                    numberOfPlayers: game.numberOfPlayers,
+                    title: game.title,
+                    description: game.description,
+                    gameTypeId: game.gameTypeId
+                })
+                
+            })
+        }
+    }, [props.match.params.gameId])
+
     /*
         Update the `currentGame` state variable every time
         the state of one of the input fields changes.
@@ -35,10 +46,7 @@ export const GameForm = props => {
         newGameState[event.target.name] = event.target.value
         setCurrentGame(newGameState)
     }
-    console.log("currentGame", currentGame)
-
-    console.log("gameTypes", gameTypes)
-
+    
     return (
         <form className="gameForm">
             <h2 className="gameForm__title">Register New Game</h2>
@@ -72,34 +80,53 @@ export const GameForm = props => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="gameTypeId">Game Type: </label>
-                    <select type="dropdown" name="gameTypeId" required autoFocus className="form-control" 
+                    <select type="dropdown" name="gameTypeId" required autoFocus className="form-control"
                         onChange={handleControlledInputChange}
                     >
-                        <option value="" disabled selected>Select your option</option> 
-                    {gameTypes.map(gt => <option key={gt.id} value={gt.id}>{gt.label}</option>)} </select>
+                        <option value="" disabled selected>Select your option</option>
+                        {gameTypes.map(gt => <option key={gt.id} value={gt.id}>{gt.label}</option>)} </select>
 
                 </div>
             </fieldset>
 
             {/* You create the rest of the input fields for each game property */}
+            {
+                ("gameId" in props.match.params)
+                    ? <button 
+                        onClick={evt => {
+                            // Prevent form from being submitted
+                            evt.preventDefault()
 
-            <button type="submit"
-                onClick={evt => {
-                    // Prevent form from being submitted
-                    evt.preventDefault()
+                            editGame({
+                                id: props.match.params.gameId, 
+                                title: currentGame.title,
+                                numberOfPlayers: parseInt(currentGame.numberOfPlayers),
+                                description: currentGame.description,
+                                gameTypeId: parseInt(currentGame.gameTypeId)
+                            })
+                            .then(() => props.history.push("/games"))
+                        }}
+                        className="btn btn-primary">Edit</button>
+                    : <button type="submit"
+                        onClick={evt => {
+                            // Prevent form from being submitted
+                            evt.preventDefault()
 
-                    const game = {
+                            const game = {
 
-                        title: currentGame.title,
-                        numberOfPlayers: parseInt(currentGame.numberOfPlayers),
-                        description: currentGame.description,
-                        gameTypeId: parseInt(currentGame.gameTypeId)
-                    }
+                                title: currentGame.title,
+                                numberOfPlayers: parseInt(currentGame.numberOfPlayers),
+                                description: currentGame.description,
+                                gameTypeId: parseInt(currentGame.gameTypeId)
+                            }
 
-                    // Send POST request to your API
-                    createGame(game)
-                }}
-                className="btn btn-primary">Create</button>
+                            // Send POST request to your API
+                            createGame(game)
+                            .then(() => props.history.push("/"))
+                        }}
+                        className="btn btn-primary">Create</button>
+            }
+
         </form>
     )
 }
