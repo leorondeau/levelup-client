@@ -22,17 +22,17 @@ export const GameForm = props => {
 
     // console.log("" , gameId in props.match.params)
     useEffect(() => {
-        
+
         if ("gameId" in props.match.params) {
             getGame(props.match.params.gameId).then(game => {
-                console.log(game)
+                console.log("game", game)
                 setCurrentGame({
-                    numberOfPlayers: game.numberOfPlayers,
+                    numberOfPlayers: game.number_of_players,
                     title: game.title,
                     description: game.description,
-                    gameTypeId: game.gameTypeId
+                    gameTypeId: game.game_type.id
                 })
-                
+
             })
         }
     }, [props.match.params.gameId])
@@ -46,7 +46,7 @@ export const GameForm = props => {
         newGameState[event.target.name] = event.target.value
         setCurrentGame(newGameState)
     }
-    
+
     return (
         <form className="gameForm">
             <h2 className="gameForm__title">Register New Game</h2>
@@ -81,9 +81,10 @@ export const GameForm = props => {
                 <div className="form-group">
                     <label htmlFor="gameTypeId">Game Type: </label>
                     <select type="dropdown" name="gameTypeId" required autoFocus className="form-control"
+                        value={currentGame.gameTypeId}
                         onChange={handleControlledInputChange}
                     >
-                        <option value="" disabled selected>Select your option</option>
+                        <option value="0" disabled selected>Select your option</option>
                         {gameTypes.map(gt => <option key={gt.id} value={gt.id}>{gt.label}</option>)} </select>
 
                 </div>
@@ -92,19 +93,19 @@ export const GameForm = props => {
             {/* You create the rest of the input fields for each game property */}
             {
                 ("gameId" in props.match.params)
-                    ? <button 
+                    ? <button
                         onClick={evt => {
                             // Prevent form from being submitted
                             evt.preventDefault()
 
                             editGame({
-                                id: props.match.params.gameId, 
+                                id: props.match.params.gameId,
                                 title: currentGame.title,
                                 numberOfPlayers: parseInt(currentGame.numberOfPlayers),
                                 description: currentGame.description,
                                 gameTypeId: parseInt(currentGame.gameTypeId)
                             })
-                            .then(() => props.history.push("/games"))
+                                .then(() => props.history.push("/games"))
                         }}
                         className="btn btn-primary">Edit</button>
                     : <button type="submit"
@@ -122,7 +123,7 @@ export const GameForm = props => {
 
                             // Send POST request to your API
                             createGame(game)
-                            .then(() => props.history.push("/"))
+                                .then(() => props.history.push("/"))
                         }}
                         className="btn btn-primary">Create</button>
             }
