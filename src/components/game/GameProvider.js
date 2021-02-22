@@ -23,6 +23,7 @@ export const GameProvider = (props) => {
                 "Authorization": `Token ${localStorage.getItem("lu_token")}`,
                 "Content-Type": "application/json"
             },
+            // assigning the value to body. stringify takes a object as a param and returns a json string 
             body: JSON.stringify(game)
         })
             .then(setGames)

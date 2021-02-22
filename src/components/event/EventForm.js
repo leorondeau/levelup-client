@@ -23,15 +23,22 @@ export const EventForm = props => {
         
     }, [])
 
-
-    const handleControlledInputChange = (e) => {
+    /*The parameter <event> is inherited from the onChange event in the input field
+    It is the way in which you can access all attributes in the input field. 
+    Object.assign({}, source) creates a copy of an object and stores them in the empty object.
+    
+    ++handleControlledInputChange is acting as the event listener++
+    */
+    const handleControlledInputChange = (event) => {
         const newEventState = Object.assign({}, currentEvent)
-        newEventState[e.target.name] = e.target.value
+        // event.target.name = key event.target.value = value
+        // target is the dom element
+        newEventState[event.target.name] = event.target.value
         setCurrentEvent(newEventState)
     }
     console.log("currentEvent", currentEvent)
 
-
+    // You can put onChange or onClick events anywhere for ex. in a <div>
 
     return (
         <form className="gameForm">

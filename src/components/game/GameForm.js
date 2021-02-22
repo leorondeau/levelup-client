@@ -123,6 +123,8 @@ export const GameForm = props => {
 
                             // Send POST request to your API
                             createGame(game)
+                                // History is an array that keeps track of all the urls and the browser is on the last
+                                // element in that array so .push is adding ("/") to the end of the array
                                 .then(() => props.history.push("/"))
                         }}
                         className="btn btn-primary">Create</button>
